@@ -37,6 +37,9 @@ dependencies:
   toast: ^0.1.5
   shared_preferences: ^2.0.5
   carousel_slider: ^3.0.0
+  #firebase
+  firebase_core: ^1.6.0
+  firebase_auth: ^3.0.2
 
 dev_dependencies:
   flutter_test:
