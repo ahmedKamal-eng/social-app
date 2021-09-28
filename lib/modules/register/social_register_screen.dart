@@ -1,6 +1,7 @@
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/layout/home_layout.dart';
 import 'package:social_app/shared/component/component.dart';
 import 'package:social_app/shared/component/constant.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
@@ -20,8 +21,8 @@ class SocialRegisterScreen extends StatelessWidget {
       create: (BuildContext context) => SocialRegisterCubit(),
       child: BlocConsumer<SocialRegisterCubit, SocialRegisterStates>(
         listener: (context, state) {
-          if (state is SocialRegisterErrorState) {
-            showToast(message: state.error.toString(), color: Colors.red[300]);
+          if (state is SocialCreateUserSuccessState) {
+            navigateAndFinish(context, HomeLayout());
           }
         },
         builder: (context, state) {
@@ -43,7 +44,7 @@ class SocialRegisterScreen extends StatelessWidget {
                               .copyWith(color: Colors.black),
                         ),
                         Text(
-                          'register now to browse our hot offers',
+                          'register now to communicate with friends',
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1

@@ -1,5 +1,4 @@
 import 'package:social_app/models/login_model.dart';
-import 'package:social_app/models/login_model.dart';
 
 abstract class SocialLoginStates {}
 
@@ -8,7 +7,8 @@ class SocialLoginInitialState extends SocialLoginStates {}
 class SocialLoginLoadingState extends SocialLoginStates {}
 
 class SocialLoginSuccessState extends SocialLoginStates {
-  SocialLoginSuccessState();
+  final String uId;
+  SocialLoginSuccessState(this.uId);
 }
 
 class SocialLoginErrorState extends SocialLoginStates {

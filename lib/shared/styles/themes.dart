@@ -29,6 +29,11 @@ ThemeData darkTheme = ThemeData(
   textTheme: TextTheme(
     bodyText1: TextStyle(
         fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+    subtitle1: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+        height: 1.3),
   ),
   fontFamily: 'Jannah',
 );
@@ -60,6 +65,11 @@ ThemeData lightTheme = ThemeData(
   textTheme: TextTheme(
     bodyText1: TextStyle(
         fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+    subtitle1: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+        height: 1.3),
   ),
   fontFamily: 'Jannah',
 );

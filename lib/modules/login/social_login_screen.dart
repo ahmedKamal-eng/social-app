@@ -1,9 +1,11 @@
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/layout/home_layout.dart';
 import 'package:social_app/modules/login/states.dart';
 import 'package:social_app/modules/register/social_register_screen.dart';
 import 'package:social_app/shared/component/component.dart';
+import 'package:social_app/shared/network/local/cache_helper.dart';
 import 'package:social_app/shop_cubit/cubit.dart';
 import 'package:social_app/shop_cubit/states.dart';
 import 'cubit/cubit.dart';
@@ -20,6 +22,11 @@ class SocialLoginScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is SocialLoginErrorState) {
             showToast(message: state.error, color: Colors.red[300]);
+          }
+          if (state is SocialLoginSuccessState) {
+            CacheHelper.saveData(key: 'uId', value: state.uId).then((value) {
+              navigateAndFinish(context, HomeLayout());
+            });
           }
         },
         builder: (context, state) {
@@ -41,7 +48,7 @@ class SocialLoginScreen extends StatelessWidget {
                               .copyWith(color: Colors.black),
                         ),
                         Text(
-                          'login now to browse our hot offers',
+                          'login now to communicate with friends',
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1
