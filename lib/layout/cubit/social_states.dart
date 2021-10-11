@@ -17,3 +17,42 @@ class SocialGetUserErrorState extends SocialStates {
 class SocialChangeBottomNavState extends SocialStates {}
 
 class SocialNewPostState extends SocialStates {}
+
+// image picker states
+// Profile
+class SocialProfileImagePickedSuccessState extends SocialStates {}
+
+class SocialProfileImagePickedErrorState extends SocialStates {
+  String error;
+  SocialProfileImagePickedErrorState({this.error});
+}
+
+//cover
+class SocialCoverImageSuccessState extends SocialStates {}
+
+class SocialCoverImageErrorState extends SocialStates {
+  String error;
+  SocialCoverImageErrorState({this.error});
+}
+
+// upload image
+// Profile
+class SocialUploadProfileSuccessState extends SocialStates {}
+
+class SocialUploadProfileErrorState extends SocialStates {
+  String error;
+  SocialUploadProfileErrorState({this.error});
+}
+
+//cover
+class SocialUploadCoverSuccessState extends SocialStates {}
+
+class SocialUploadCoverErrorState extends SocialStates {
+  String error;
+  SocialUploadCoverErrorState({this.error});
+}
+
+// update User profile states
+class SocialUpdateProfileLoadingState extends SocialStates {}
+
+class SocialUpdateProfileErrorState extends SocialStates {}

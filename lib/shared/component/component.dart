@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:social_app/shared/styles/icon_broken.dart';
 // import 'package:shop_app/shop_app/cubit.dart';
 // import 'package:shop_app/styles/colors.dart';
 import 'package:toast/toast.dart';
@@ -36,11 +37,11 @@ Widget defaultFormField({
         ),
         suffixIcon: suffix != null
             ? IconButton(
-          onPressed: suffixPressed,
-          icon: Icon(
-            suffix,
-          ),
-        )
+                onPressed: suffixPressed,
+                icon: Icon(
+                  suffix,
+                ),
+              )
             : null,
         border: OutlineInputBorder(),
       ),
@@ -54,20 +55,35 @@ void navigateAndFinish(context, widget) {
   Navigator.pushAndRemoveUntil(
     context,
     MaterialPageRoute(builder: (context) => widget),
-        (Route<dynamic> route) => false,
+    (Route<dynamic> route) => false,
   );
 }
 
 Widget myDivider() => Padding(
-  padding: const EdgeInsetsDirectional.only(
-    start: 20.0,
-  ),
-  child: Container(
-    width: double.infinity,
-    height: 1.0,
-    color: Colors.grey[300],
-  ),
-);
+      padding: const EdgeInsetsDirectional.only(
+        start: 20.0,
+      ),
+      child: Container(
+        width: double.infinity,
+        height: 1.0,
+        color: Colors.grey[300],
+      ),
+    );
+
+Widget defaultAppBar(
+    {@required BuildContext context, String title, List<Widget> actions}) {
+  return AppBar(
+    leading: IconButton(
+      icon: Icon(IconBroken.Arrow___Left_2),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    ),
+    titleSpacing: 5.0,
+    title: Text(title),
+    actions: actions,
+  );
+}
 
 Widget defaultButton({
   double width = double.infinity,
@@ -79,7 +95,7 @@ Widget defaultButton({
 }) =>
     Container(
       width: width,
-      height: 50.0,
+      height: 40.0,
       child: MaterialButton(
         onPressed: function,
         child: Text(
@@ -98,7 +114,7 @@ Widget defaultButton({
     );
 
 Widget defaultTextButton(
-    {@required Function function, @required String text}) =>
+        {@required Function function, @required String text}) =>
     TextButton(
       onPressed: function,
       child: Text(text.toUpperCase()),
