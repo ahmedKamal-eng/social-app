@@ -118,7 +118,57 @@ class EditProfileScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 5,
+                    height: 20,
+                  ),
+                  if (SocialCubit.get(context).profileImage != null ||
+                      SocialCubit.get(context).coverImage != null)
+                    Row(
+                      children: [
+                        if (SocialCubit.get(context).profileImage != null)
+                          Expanded(
+                              child: Column(
+                            children: [
+                              defaultButton(
+                                  function: () {
+                                    SocialCubit.get(context).uploadProfileImage(
+                                        name: nameController.text,
+                                        phone: phoneController.text,
+                                        bio: bioController.text);
+                                  },
+                                  text: "Upload Profiel"),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              if (state is SocialUpdateProfileLoadingState)
+                                LinearProgressIndicator()
+                            ],
+                          )),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        if (SocialCubit.get(context).coverImage != null)
+                          Expanded(
+                              child: Column(
+                            children: [
+                              defaultButton(
+                                  function: () {
+                                    SocialCubit.get(context).uploadCoverImage(
+                                        name: nameController.text,
+                                        phone: phoneController.text,
+                                        bio: bioController.text);
+                                  },
+                                  text: "Upload Cover"),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              if (state is SocialUpdateProfileLoadingState)
+                                LinearProgressIndicator()
+                            ],
+                          )),
+                      ],
+                    ),
+                  SizedBox(
+                    height: 20,
                   ),
                   defaultFormField(
                       controller: nameController,
