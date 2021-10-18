@@ -1,62 +1,82 @@
+import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/layout/cubit/social_cubit.dart';
+import 'package:social_app/layout/cubit/social_states.dart';
+import 'package:social_app/models/post_model.dart';
+import 'package:social_app/shared/component/component.dart';
 import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/icon_broken.dart';
 
 class FeedsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          Card(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            elevation: 5.0,
-            margin: EdgeInsets.all(
-              8.0,
-            ),
-            child: Stack(
-              alignment: AlignmentDirectional.bottomEnd,
-              children: [
-                Image(
-                  image: NetworkImage(
-                    'https://image.freepik.com/free-photo/horizontal-shot-smiling-curly-haired-woman-indicates-free-space-demonstrates-place-your-advertisement-attracts-attention-sale-wears-green-turtleneck-isolated-vibrant-pink-wall_273609-42770.jpg',
-                  ),
-                  fit: BoxFit.cover,
-                  height: 200.0,
-                  width: double.infinity,
+    return BlocConsumer<SocialCubit, SocialStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              Card(
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                elevation: 5.0,
+                margin: EdgeInsets.all(
+                  8.0,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'communicate with friends',
-                    style: Theme.of(context).textTheme.subtitle1.copyWith(
-                          color: Colors.white,
-                        ),
+                child: Stack(
+                  alignment: AlignmentDirectional.bottomEnd,
+                  children: [
+                    Image(
+                      image: NetworkImage(
+                        'https://image.freepik.com/free-photo/horizontal-shot-smiling-curly-haired-woman-indicates-free-space-demonstrates-place-your-advertisement-attracts-attention-sale-wears-green-turtleneck-isolated-vibrant-pink-wall_273609-42770.jpg',
+                      ),
+                      fit: BoxFit.cover,
+                      height: 200.0,
+                      width: double.infinity,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'communicate with friends',
+                        style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              color: Colors.white,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ConditionalBuilder(
+                condition: SocialCubit.get(context).posts.length > 0 &&
+                    SocialCubit.get(context).userModel != null,
+                builder: (context) => ListView.separated(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) => buildPostItem(context,
+                      SocialCubit.get(context).posts[index], index, false),
+                  itemCount: SocialCubit.get(context).posts.length,
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: 8,
                   ),
                 ),
-              ],
-            ),
+                fallback: (context) => Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+            ],
           ),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => buildPostItem(context),
-            itemCount: 10,
-            separatorBuilder: (context, index) => SizedBox(
-              height: 8,
-            ),
-          ),
-          SizedBox(
-            height: 8,
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
-Widget buildPostItem(context) => Card(
+Widget buildPostItem(context, PostModel model, int index, bool showComment) =>
+    Card(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 5,
       margin: EdgeInsets.symmetric(horizontal: 8),
@@ -68,8 +88,7 @@ Widget buildPostItem(context) => Card(
               children: [
                 CircleAvatar(
                   radius: 30,
-                  backgroundImage: NetworkImage(
-                      'https://image.freepik.com/free-photo/skeptical-woman-has-unsure-questioned-expression-points-fingers-sideways_273609-40770.jpg'),
+                  backgroundImage: NetworkImage(model.image),
                 ),
                 SizedBox(
                   width: 20,
@@ -81,7 +100,7 @@ Widget buildPostItem(context) => Card(
                       Row(
                         children: [
                           Text(
-                            'Mona Ali',
+                            model.name,
                             style: TextStyle(height: 1.4),
                           ),
                           SizedBox(
@@ -95,7 +114,7 @@ Widget buildPostItem(context) => Card(
                         ],
                       ),
                       Text(
-                        'january 21, 2021 at 11:00 pm',
+                        model.dateTime,
                         style: Theme.of(context)
                             .textTheme
                             .caption
@@ -124,11 +143,11 @@ Widget buildPostItem(context) => Card(
               ),
             ),
             Text(
-              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+              model.text,
               style: Theme.of(context).textTheme.subtitle1,
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 5, top: 10),
+              padding: const EdgeInsets.only(bottom: 5, top: 5),
               child: Container(
                 width: double.infinity,
                 child: Wrap(
@@ -173,18 +192,22 @@ Widget buildPostItem(context) => Card(
                 ),
               ),
             ),
-            Container(
-              height: 140,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                image: DecorationImage(
-                    image: NetworkImage(
-                      'https://image.freepik.com/free-photo/horizontal-shot-smiling-curly-haired-woman-indicates-free-space-demonstrates-place-your-advertisement-attracts-attention-sale-wears-green-turtleneck-isolated-vibrant-pink-wall_273609-42770.jpg',
-                    ),
-                    fit: BoxFit.cover),
+            if (model.postImage != '')
+              Padding(
+                padding: EdgeInsets.only(top: 15),
+                child: Container(
+                  height: 140,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    image: DecorationImage(
+                        image: NetworkImage(
+                          model.postImage,
+                        ),
+                        fit: BoxFit.cover),
+                  ),
+                ),
               ),
-            ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
@@ -204,7 +227,7 @@ Widget buildPostItem(context) => Card(
                               width: 5,
                             ),
                             Text(
-                              '120',
+                              '${SocialCubit.get(context).likes[index]}',
                               style: Theme.of(context).textTheme.caption,
                             )
                           ],
@@ -249,6 +272,33 @@ Widget buildPostItem(context) => Card(
                 color: Colors.grey[300],
               ),
             ),
+            if (showComment)
+              Container(
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.separated(
+                    itemBuilder: (context, index) => Row(children: [
+                          CircleAvatar(
+                            radius: 18,
+                            backgroundImage: NetworkImage(
+                                '${SocialCubit.get(context).userModel.image}'),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Text(
+                            'write a comment ...',
+                            style: Theme.of(context)
+                                .textTheme
+                                .caption
+                                .copyWith(height: 1.4),
+                          ),
+                        ]),
+                    separatorBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: myDivider(),
+                        ),
+                    itemCount: 10),
+              ),
             Row(
               children: [
                 Expanded(
@@ -257,7 +307,7 @@ Widget buildPostItem(context) => Card(
                       CircleAvatar(
                         radius: 18,
                         backgroundImage: NetworkImage(
-                            'https://image.freepik.com/free-photo/skeptical-woman-has-unsure-questioned-expression-points-fingers-sideways_273609-40770.jpg'),
+                            '${SocialCubit.get(context).userModel.image}'),
                       ),
                       SizedBox(
                         width: 15,
@@ -270,7 +320,10 @@ Widget buildPostItem(context) => Card(
                             .copyWith(height: 1.4),
                       ),
                     ]),
-                    onTap: () {},
+                    onTap: () {
+                      SocialCubit.get(context)
+                          .toggleCommentSection(showComment: showComment);
+                    },
                   ),
                 ),
                 InkWell(
@@ -294,7 +347,10 @@ Widget buildPostItem(context) => Card(
                       ],
                     ),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    SocialCubit.get(context)
+                        .likePost(SocialCubit.get(context).postsId[index]);
+                  },
                 ),
               ],
             ),

@@ -28,11 +28,11 @@ class SocialProfileImagePickedErrorState extends SocialStates {
 }
 
 //cover
-class SocialCoverImageSuccessState extends SocialStates {}
+class SocialGetCoverImageSuccessState extends SocialStates {}
 
-class SocialCoverImageErrorState extends SocialStates {
+class SocialGetCoverImageErrorState extends SocialStates {
   String error;
-  SocialCoverImageErrorState({this.error});
+  SocialGetCoverImageErrorState({this.error});
 }
 
 // upload image
@@ -56,3 +56,44 @@ class SocialUploadCoverErrorState extends SocialStates {
 class SocialUpdateProfileLoadingState extends SocialStates {}
 
 class SocialUpdateProfileErrorState extends SocialStates {}
+
+//create post
+class SocialCreatePostLoadingState extends SocialStates {}
+
+class SocialCreatePostSuccessState extends SocialStates {}
+
+class SocialCreatePostErrorState extends SocialStates {}
+
+//get post image states
+class SocialGetPostImageSuccessState extends SocialStates {}
+
+class SocialGetPostImageErrorState extends SocialStates {
+  String error;
+  SocialGetPostImageErrorState({this.error});
+}
+
+class SocialRemovePostImageState extends SocialStates {}
+
+// get Post states
+class SocialLoadingGetPostState extends SocialStates {}
+
+class SocialGetPostSuccessState extends SocialStates {}
+
+class SocialGetPostErrorState extends SocialStates {
+  final String error;
+
+  SocialGetPostErrorState(this.error);
+}
+
+// like states
+class SocialLikeSuccessState extends SocialStates {}
+
+class SocialLikeErrorState extends SocialStates {
+  final String error;
+
+  SocialLikeErrorState(this.error);
+}
+
+//comment
+
+class SocialToggleCommentState extends SocialStates {}

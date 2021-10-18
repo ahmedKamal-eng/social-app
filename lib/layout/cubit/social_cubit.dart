@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/cubit/social_states.dart';
+import 'package:social_app/models/post_model.dart';
 import 'package:social_app/models/social_user_model.dart';
 import 'package:social_app/modules/chats/chat_screen.dart';
 import 'package:social_app/modules/feeds/feeds_screen.dart';
@@ -87,10 +88,10 @@ class SocialCubit extends Cubit<SocialStates> {
 
     if (pickedFile != null) {
       coverImage = File(pickedFile.path);
-      emit(SocialCoverImageSuccessState());
+      emit(SocialGetCoverImageSuccessState());
     } else {
       print('No image selected');
-      emit(SocialCoverImageErrorState());
+      emit(SocialGetCoverImageErrorState());
     }
   }
 
@@ -189,5 +190,117 @@ class SocialCubit extends Cubit<SocialStates> {
     }).catchError(() {
       emit(SocialUpdateProfileErrorState());
     });
+  }
+
+  // Create post
+
+  File postImage;
+
+  // get postImage
+  Future<void> getPostImage() async {
+    final pickedFile = await picker.getImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedFile != null) {
+      postImage = File(pickedFile.path);
+      emit(SocialGetPostImageSuccessState());
+    } else {
+      print('No image selected');
+      emit(SocialGetPostImageErrorState());
+    }
+  }
+
+  void removePostImage() {
+    postImage = null;
+    emit(SocialRemovePostImageState());
+  }
+
+  void uploadPostImage({@required String dateTime, @required String text}) {
+    emit(SocialCreatePostLoadingState());
+
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child(
+            'posts/${Uri.file(postImage.path).pathSegments.last}') //create posts folder in firebaseStorage and put image in it
+        .putFile(postImage) //put postImage in users
+        .then((value) {
+      emit(SocialUploadCoverSuccessState());
+      value.ref.getDownloadURL().then((value) {
+        print(value);
+        createPost(dateTime: dateTime, text: text, postImage: value);
+      }).catchError((e) {
+        emit(SocialUploadCoverErrorState());
+      });
+    }).catchError((e) {
+      emit(SocialUploadCoverErrorState());
+    });
+  }
+
+  void createPost(
+      {@required String dateTime, @required String text, String postImage}) {
+    emit(SocialCreatePostLoadingState());
+    PostModel model = PostModel(
+      name: userModel.name,
+      image: userModel.image,
+      uId: userModel.uId,
+      dateTime: dateTime,
+      text: text,
+      postImage: postImage ?? '',
+    );
+
+    FirebaseFirestore.instance
+        .collection('posts')
+        .add(model.toMap())
+        .then((value) {
+      emit(SocialCreatePostSuccessState());
+    }).catchError((e) {
+      print(e.toString());
+      emit(SocialCreatePostErrorState());
+    });
+  }
+
+  //get Posts
+
+  List<PostModel> posts = [];
+  List<String> postsId = [];
+  List<int> likes = [];
+  void getPosts() {
+    FirebaseFirestore.instance.collection('posts').get().then((value) {
+      value.docs.forEach((element) {
+        element.reference.collection('likes').get().then((value) {
+          likes.add(value.docs.length);
+          postsId.add(element.id);
+          posts.add(PostModel.fromJson(element.data()));
+        });
+      });
+      emit(SocialGetPostSuccessState());
+    }).catchError((e) {
+      emit(SocialGetPostErrorState(e.toString()));
+    });
+  }
+
+  void likePost(String postId) {
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .collection('likes')
+        .doc(userModel.uId)
+        .set({'like': true}).then((value) {
+      emit(SocialLikeSuccessState());
+    }).catchError((e) {
+      emit(SocialLikeErrorState(e.toString()));
+    });
+  }
+
+  //Comment section
+
+  void toggleCommentSection({bool showComment = false}) {
+    if (showComment) {
+      showComment = false;
+    } else {
+      showComment = true;
+    }
+    emit(SocialToggleCommentState());
   }
 }
