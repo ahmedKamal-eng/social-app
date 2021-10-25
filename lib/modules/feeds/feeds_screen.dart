@@ -53,8 +53,11 @@ class FeedsScreen extends StatelessWidget {
                 builder: (context) => ListView.separated(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) => buildPostItem(context,
-                      SocialCubit.get(context).posts[index], index, false),
+                  itemBuilder: (context, index) => buildPostItem(
+                    context,
+                    SocialCubit.get(context).posts[index],
+                    index,
+                  ),
                   itemCount: SocialCubit.get(context).posts.length,
                   separatorBuilder: (context, index) => SizedBox(
                     height: 8,
@@ -75,7 +78,11 @@ class FeedsScreen extends StatelessWidget {
   }
 }
 
-Widget buildPostItem(context, PostModel model, int index, bool showComment) =>
+Widget buildPostItem(
+  context,
+  PostModel model,
+  int index,
+) =>
     Card(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 5,
@@ -272,33 +279,33 @@ Widget buildPostItem(context, PostModel model, int index, bool showComment) =>
                 color: Colors.grey[300],
               ),
             ),
-            if (showComment)
-              Container(
-                constraints: BoxConstraints(maxHeight: 200),
-                child: ListView.separated(
-                    itemBuilder: (context, index) => Row(children: [
-                          CircleAvatar(
-                            radius: 18,
-                            backgroundImage: NetworkImage(
-                                '${SocialCubit.get(context).userModel.image}'),
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            'write a comment ...',
-                            style: Theme.of(context)
-                                .textTheme
-                                .caption
-                                .copyWith(height: 1.4),
-                          ),
-                        ]),
-                    separatorBuilder: (context, index) => Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: myDivider(),
-                        ),
-                    itemCount: 10),
-              ),
+            // if (showComment)
+            //   Container(
+            //     constraints: BoxConstraints(maxHeight: 200),
+            //     child: ListView.separated(
+            //         itemBuilder: (context, index) => Row(children: [
+            //               CircleAvatar(
+            //                 radius: 18,
+            //                 backgroundImage: NetworkImage(
+            //                     '${SocialCubit.get(context).userModel.image}'),
+            //               ),
+            //               SizedBox(
+            //                 width: 15,
+            //               ),
+            //               Text(
+            //                 'write a comment ...',
+            //                 style: Theme.of(context)
+            //                     .textTheme
+            //                     .caption
+            //                     .copyWith(height: 1.4),
+            //               ),
+            //             ]),
+            //         separatorBuilder: (context, index) => Padding(
+            //               padding: const EdgeInsets.all(8.0),
+            //               child: myDivider(),
+            //             ),
+            //         itemCount: 10),
+            //   ),
             Row(
               children: [
                 Expanded(
@@ -320,10 +327,7 @@ Widget buildPostItem(context, PostModel model, int index, bool showComment) =>
                             .copyWith(height: 1.4),
                       ),
                     ]),
-                    onTap: () {
-                      SocialCubit.get(context)
-                          .toggleCommentSection(showComment: showComment);
-                    },
+                    onTap: () {},
                   ),
                 ),
                 InkWell(

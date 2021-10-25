@@ -1,3 +1,5 @@
+import 'package:social_app/modules/chat_details/chat_details_screen.dart';
+
 abstract class SocialStates {}
 
 class SocialInitialState extends SocialStates {}
@@ -97,3 +99,9 @@ class SocialLikeErrorState extends SocialStates {
 //comment
 
 class SocialToggleCommentState extends SocialStates {}
+
+// Chat
+
+class SocialSendMessageSuccessState extends SocialStates{}
+class SocialSendMessageErrorState extends SocialStates{}
+class SocialGetMessageSuccessState extends SocialStates{}

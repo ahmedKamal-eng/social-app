@@ -19,6 +19,13 @@ void main() async {
   //this line ensure all things in the main method is initialized
   WidgetsFlutterBinding.ensureInitialized();
 
+  // String token = await FirebaseMessaging.instance.getToken();
+  // print(token);
+
+  // FirebaseMessaging.onMessage.listen((event) {
+  //   print(event.data.toString());
+  // });
+
   await Firebase.initializeApp();
   await CacheHelper.init();
   uId = CacheHelper.getData(key: 'uId');
@@ -49,10 +56,9 @@ class MyApp extends StatelessWidget {
             create: (context) => ShopCubit(),
           ),
           BlocProvider(
-            create: (context) => SocialCubit()
-              ..getUserData()
-              ..getPosts(),
-          ),
+              create: (context) => SocialCubit()
+                ..getUserData()
+                ..getPosts()),
         ],
         child: BlocConsumer<ShopCubit, ShopStates>(
           listener: (context, state) {},
